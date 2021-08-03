@@ -38,7 +38,7 @@ function CreateProduct() {
             products.forEach(product => {
                 if(product._id === param.id) {
                     setProduct(product)
-                    setImages(product.images)
+                    setImages(product.images.url)
                 }
             })
         }else{
@@ -48,40 +48,40 @@ function CreateProduct() {
         }
     }, [param.id, products])
 
-    const handleUpload = async e =>{
-        e.preventDefault()
-        try {
-            if(!isAdmin) return alert("You're not an admin")
-            const file = e.target.files[0]
+    // const handleUpload = async e =>{
+    //     e.preventDefault()
+    //     try {
+    //         if(!isAdmin) return alert("You're not an admin")
+    //         const file = e.target.files[0]
             
-            if(!file) return alert("File not exist.")
+    //         if(!file) return alert("File not exist.")
 
-            if(file.size > 1024 * 1024) // 1mb
-                return alert("Size too large!")
+    //         if(file.size > 1024 * 1024) // 1mb
+    //             return alert("Size too large!")
 
-            if(file.type !== 'image/jpeg' && file.type !== 'image/png') // 1mb
-                return alert("File format is incorrect.")
+    //         if(file.type !== 'image/jpeg' && file.type !== 'image/png') // 1mb
+    //             return alert("File format is incorrect.")
 
-            let formData = new FormData()
-            formData.append('file', file)
+    //         let formData = new FormData()
+    //         formData.append('file', file)
 
-            setLoading(true)
-            const res = await axios.post('/api/upload', formData, {
-                headers: {'content-type': 'multipart/form-data', Authorization: token}
-            })
-            setLoading(false)
-            setImages(res.data)
+    //         setLoading(true)
+    //         const res = await axios.post('/api/upload', formData, {
+    //             headers: {'content-type': 'multipart/form-data', Authorization: token}
+    //         })
+    //         setLoading(false)
+    //         setImages(res.data)
 
-        } catch (err) {
-            alert(err.response.data.msg)
-        }
-    }
+    //     } catch (err) {
+    //         alert(err.response.data.msg)
+    //     }
+    // }
 
     const handleDestroy = async () => {
         try {
             if(!isAdmin) return alert("You're not an admin")
             setLoading(true)
-            await axios.post('/api/destroy', {public_id: images.public_id}, {
+            await axios.delete('/api/products/${product._id}', {...product}, {
                 headers: {Authorization: token}
             })
             setLoading(false)
@@ -100,14 +100,14 @@ function CreateProduct() {
         e.preventDefault()
         try {
             if(!isAdmin) return alert("You're not an admin")
-            if(!images) return alert("No Image Upload")
+            // if(!images) return alert("No Image Upload")
 
             if(onEdit){
-                await axios.put(`/api/products/${product._id}`, {...product, images}, {
+                await axios.put(`/api/products/${product._id}`, {...product}, {
                     headers: {Authorization: token}
                 })
             }else{
-                await axios.post('/api/products', {...product, images}, {
+                await axios.post('/api/products', {...product}, {
                     headers: {Authorization: token}
                 })
             }
@@ -123,7 +123,7 @@ function CreateProduct() {
     }
     return (
         <div className="create_product">
-            <div className="upload">
+            {/* <div className="upload">
                 <input type="file" name="file" id="file_up" onChange={handleUpload}/>
                 {
                     loading ? <div id="file_img"><Loading /></div>
@@ -134,7 +134,7 @@ function CreateProduct() {
                     </div>
                 }
                 
-            </div>
+            </div> */}
 
             <form onSubmit={handleSubmit}>
                 <div className="row">
@@ -147,6 +147,11 @@ function CreateProduct() {
                     <label htmlFor="title">Title</label>
                     <input type="text" name="title" id="title" required
                     value={product.title} onChange={handleChangeInput} />
+                </div>
+                <div className="row">
+                    <label htmlFor="title">Image</label>
+                    <input type="text" name="images" id="images" required
+                    value={product.images} onChange={handleChangeInput} />
                 </div>
 
                 <div className="row">

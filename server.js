@@ -23,7 +23,7 @@ app.use('/api', require('./routes/productRouter'))
 app.use('/api', require('./routes/paymentRouter'))
 
 
-const dbURI = 'mongodb+srv://Himanshu:himan@cluster0.6ruw2.mongodb.net/CanadaCart?retryWrites=true&w=majority';
+const dbURI = process.env.MONGODB_URL;
 
 mongoose.connect(dbURI,{dbName:'CanadaCart'});
 

@@ -23,7 +23,7 @@ function Filters() {
                     <option value=''>All Products</option>
                     {
                         categories.map(category => (
-                            <option value={"category=" + category._id} key={category._id}>
+                            <option value={"category=" + category.name} key={category._id}>
                                 {category.name}
                             </option>
                         ))
@@ -32,7 +32,7 @@ function Filters() {
             </div>
 
             <input type="text" value={search} placeholder="Enter your search!"
-            onChange={e => setSearch(e.target.value.toLowerCase())} />
+            onChange={e => setSearch(e.target.value)} />
 
             <div className="row sort">
                 <span>Sort By: </span>
